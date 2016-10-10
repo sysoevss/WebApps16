@@ -11,7 +11,6 @@ from google.appengine.api import users
 
 import os
 import data
-import table
 import json
 
 def json_list(list, param_list):
