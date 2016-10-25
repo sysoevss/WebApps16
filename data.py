@@ -10,21 +10,42 @@ from google.appengine.api import users
 import datetime
 import time
 
+
 def force_unicode(string):
     if type(string) == unicode:
         return string
     return string.decode('utf-8')
 
+
+class Service(db.Model):
+    name = db.StringProperty(multiline=False)
+    active = db.BooleanProperty(default=True)
+
+
+def getServicesList(where=""):
+    return Service.all().filter()
+
+
+def addService(name, active):
+    service = Service()
+    service.name = name
+    service.active = active
+    service.put()
+    return service.key()
+
+
 class Client(db.Model):
-    name = db.StringProperty(multiline = False)
-    comment = db.StringProperty(multiline = True)
+    name = db.StringProperty(multiline=False)
+    comment = db.StringProperty(multiline=True)
     user = db.UserProperty()
-    created = db.DateTimeProperty(auto_now_add = True)
-    updated = db.DateTimeProperty(auto_now = True)
+    created = db.DateTimeProperty(auto_now_add=True)
+    updated = db.DateTimeProperty(auto_now=True)
     active = db.BooleanProperty()
+
 
 def getClientsList():
     return db.GqlQuery("SELECT * FROM Client WHERE user = :1 AND active = True", users.get_current_user()).fetch(1000)
+
 
 def addClient(name, comment):
     client = Client()
@@ -35,6 +56,14 @@ def addClient(name, comment):
     client.put()
     time.sleep(2)
 
+
+def updateService(key, name, active):
+    service = Service.get(key)
+    service.name = name
+    service.active = active
+    service.put()
+
+
 def updateClient(key, name, comment, active):
     client = Client.get(key)
     client.name = force_unicode(name)
@@ -43,3 +72,94 @@ def updateClient(key, name, comment, active):
     client.put()
     time.sleep(2)
 
+
+class ClientService(db.Model):
+    comment = db.StringProperty(multiline=True)
+    user_id = db.StringProperty()
+    service = db.ReferenceProperty(Service, collection_name="service_set")
+    active = db.BooleanProperty(default=True)
+
+
+def get2lists(user):
+    userServices = ClientService.all().filter("user_id = ", user.user_id()).filter("active = ", True).filter(
+        "service = ", Service.gql("WHERE active =:1", True).get())
+    keyList = []
+    for su in userServices:
+        keyList.append(su.service.key())
+    return userServices, keyList
+
+
+def addClientService(key, comment, user_id):
+    service = Service.get(key)
+    # check_unique = ClientService.all().filter("user_id = ", user_id).filter("service = ", service).filter("active = ",
+    #                                                                                                       True).count()
+    #
+    # if check_unique != 0:
+    #     return ""
+    client_service = ClientService()
+    client_service.service = service
+    client_service.comment = comment
+    client_service.user_id = user_id
+    client_service.put()
+    return client_service.key()
+
+
+def updateClientService(key, comment, active):
+    client_service = ClientService.get(key)
+    if client_service.active:
+        client_service.comment = comment
+        client_service.active = active
+        client_service.put()
+        return True
+    else:
+        return False
+
+
+class OfferService(db.Model):
+    user_id = db.StringProperty()
+    active = db.BooleanProperty(default=True)
+    name = db.StringProperty(multiline=False)
+    userComment = db.StringProperty(multiline=True, default="")
+    adminComment = db.StringProperty(multiline=True, default="")
+    adminAnswer = db.BooleanProperty(default=False)
+
+
+def get_user_offers(user_id):
+    offers = OfferService.all().filter("user_id = ", user_id).filter("active = ", True)
+    return offers
+
+
+def get_new_offer():
+    return OfferService.all().filter("active = ", True).filter("adminAnswer = ", False)
+
+
+def get_offer_with_comment():
+    return OfferService.all().filter("active =", True).filter("adminAnswer = ", True)
+
+
+def get_inactive_offers():
+    return OfferService.all().filter("active =", False)
+
+
+def add_offer(user_id, name, user_comment):
+    offer = OfferService()
+    offer.user_id = user_id
+    offer.name = name
+    offer.userComment = user_comment
+    offer.put()
+    return offer.key()
+
+
+def update_offer(key, name="", user_comment="", admin_comment="", active=True, adminAnswer=False):
+    offer = OfferService.get(key)
+    if name != "":
+        offer.name = name
+    if user_comment != "":
+        offer.userComment = user_comment
+    if admin_comment != "":
+        offer.adminComment = admin_comment
+    if active != "":
+        offer.active = active
+    if adminAnswer != "":
+        offer.adminAnswer = adminAnswer
+    offer.put()
