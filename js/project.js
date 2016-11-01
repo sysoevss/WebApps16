@@ -22,11 +22,15 @@ $(document).ready(function () {
 
     });
 
+    // function strip_html(str) {
+    //     var html = str;
+    //     var div = document.createElement("div");
+    //     div.innerHTML = html;
+    //     return div.innerText;
+    // }
+
     function strip_html(str) {
-        var html = str;
-        var div = document.createElement("div");
-        div.innerHTML = html;
-        return div.innerText;
+        return str;
     }
 
     //
