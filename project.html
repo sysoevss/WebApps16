@@ -113,6 +113,26 @@
                   <td><a class="btn-small btn-success" href="#" id='add_client' title="Add"><i
                       class="icon-plus"></i></a></td>
                 </tr>
+				
+				 <!--Edit client - class for clone-->
+				<tr class="client_edit warning" style="display:none">
+				<td style="display:none">
+				  <input type="hidden" class="service_key">
+				</td>
+				  <td>
+				<input style="width:90%" type="text" class="btn-mini client_name">
+				 </td>
+				 <td>
+				<input style="width:90%" type="text" class="btn-mini client_comment">
+				 </td>
+				 <td>
+                <a class="btn-small btn-success accept_client_changes" href="#" title="Принять">
+                  <i class="icon-ok"></i></a>
+                <a class="btn-small btn-danger cancel_client_changes" href="#" title="Отмена">
+                  <i class="icon-remove"></i></a>
+				  </td>
+				</tr>
+				
                 </thead>
                 <tbody>
 
@@ -129,27 +149,9 @@
                   </td>
                 </tr>
                 {% endfor %}
-				
-				 <!--Edit client - class for clone-->
-				<tr class="client_edit warning" style="display:none">
-				<td style="display:none">
-				  <input type="hidden" class="service_key">
-				</td>
-				  <td>
-				<input style="width:90%" type="text" class="btn-mini client_name">
-				 </td>
-				 <td>
-				<input style="width:90%" type="text" class="btn-mini client_comment">
-				 </td>
-				 <td>
-                <a class="btn-small btn-success accept_client_changes" id="accept_client_changes" href="#" title="Принять">
-                  <i class="icon-ok"></i></a>
-                <a class="btn-small btn-danger cancel_client_changes" href="#" title="Отмена">
-                  <i class="icon-remove"></i></a>
-				  </td>
-				</tr>
-				
+
                 </tbody>
+				
               </table>
             </div>
           </div> <!-- /container -->
