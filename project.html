@@ -118,9 +118,9 @@
 
                 {% for c in clients %}
                 <tr>
-                  <td style="display:none">{{c.key}}</td>
-                  <td>{{ c.name }}</td>
-                  <td>{{ c.comment }}</td>
+                  <td style="display:none" class="service_key">{{c.key}}</td>
+                  <td class="client_name">{{ c.name }}</td>
+                  <td class="client_comment">{{ c.comment }}</td>
                   <td>
                     <a class="btn-small btn-warning delete_client" href="#" title="Delete client">
                       <i class="icon-trash"></i></a>
@@ -129,6 +129,26 @@
                   </td>
                 </tr>
                 {% endfor %}
+				
+				 <!--Edit client - class for clone-->
+				<tr class="client_edit warning" style="display:none">
+				<td style="display:none">
+				  <input type="hidden" class="service_key">
+				</td>
+				  <td>
+				<input style="width:90%" type="text" class="btn-mini client_name">
+				 </td>
+				 <td>
+				<input style="width:90%" type="text" class="btn-mini client_comment">
+				 </td>
+				 <td>
+                <a class="btn-small btn-success accept_client_changes" id="accept_client_changes" href="#" title="Принять">
+                  <i class="icon-ok"></i></a>
+                <a class="btn-small btn-danger cancel_client_changes" href="#" title="Отмена">
+                  <i class="icon-remove"></i></a>
+				  </td>
+				</tr>
+				
                 </tbody>
               </table>
             </div>
@@ -172,16 +192,17 @@
               </h2>
 
               <table class="table-bordered" style="width:900px;" id="ph">
-                <tr>
-                  <td><a href="/games/minesweeper.html" target="_blank"><b>Сапер</b></a></td>
-                </tr>
-                <tr>
-                  <td><a href="/games/hanoi.html" target="_blank"><b>Ханойская башня</b></a></td>
-                </tr>
-                <tr>
-                  <td><a href="/games/2048.html" target="_blank"><b>2048</b></a></td>
-                </tr>
+               	<tr>
+					<td><button type="button" onclick="loadGame('/games/minesweeper.html')">Сапер</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" onclick="loadGame('/games/hanoi.html')">Ханойская башня</button></td>
+				</tr>		
+				<tr>
+					<td><button type="button" onclick=loadGame('/games/2048.html')>2048</button></td>
+				</tr>	
               </table>
+			  <div id="game">Выберите игру</div>
             </div>
           </div>
 

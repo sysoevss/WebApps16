@@ -804,26 +804,66 @@ $(document).ready(function () {
         });
     });
     //
-    // editing client
+
+// editing client
+	function edit_client(key, name, comment) {
+		var $form = $("#clients_table").find(".client_edit").clone(true,true);
+		$form.find("input.client_name").val(name);
+		$form.find("input.client_comment").val(comment);
+		$form.find("input.service_key").val(key);
+		$form.removeAttr("style").removeClass("client_edit");
+		return $form;
+	}
+	
+	
+	//Edit client button click
     $(document).on('click', 'a[class^="btn-small btn-warning edit_client"]', function (e) {
         e.preventDefault();
-        key = $(this).parent().parent().find('td:first').html();
-        name = $("#new_client_name").val();
-        comment = $("#new_client_comment").val();
-        if (name == "")
-            name = $(this).parent().parent().find('td')[1].innerHTML;
-        if (comment == "")
-            comment = $(this).parent().parent().find('td')[2].innerHTML;
-        active = "True";
+		
+        var $thisTr = $(this).parent().parent();
+
+        var $keyTd = $thisTr.find("td.service_key");
+        var $nameTd = $thisTr.find("td.client_name");
+        var $commentTd = $thisTr.find("td.client_comment");
+		
+        var key = $keyTd.text();
+        var name = $nameTd.text();
+        var comment = $commentTd.text();
+        var $newTr = edit_client(key,name,comment);
+
+        $newTr.insertAfter($thisTr);
+        
+        $thisTr.remove();
+    });
+	
+	// accept_client_changes button click
+    $(document).on('click', 'a[class^="btn-small btn-success accept_client_changes"]', function (e) {
+		e.preventDefault();
+        name = $(this).parent().parent().find("input.client_name").val();
+        comment = $(this).parent().parent().find("input.client_comment").val();
+		key =  $(this).parent().parent().find("input.service_key").val();
+        if (!name || name == "") {
+            alert("Client name can't be empty!");
+            return;
+        }
+		active = "True";
         $.get("/object_update/", {
             object_type: "client", key: key, name: name, comment: comment,
             active: active
         }, function () {
             updateClientsList();
         });
-        $("#new_client_name").val("");
-        $("#new_client_comment").val("");
     });
+	
+	// cancel_client_changes button click
+    $(document).on('click', 'a[class^="btn-small btn-danger cancel_client_changes"]', function (e) {
+		e.preventDefault();
+		
+        var $thisTr = $(this).parent().parent();
+		updateClientsList();
+        $thisTr.remove();
+    });
+	
 
     // after everything is loaded, display the page
     $("#all_content").show();
@@ -839,13 +879,16 @@ function buildHtmlTable(list, params, extra) {
     result = "";
     for (var i = 0; i < list.length; i++) {
         result += "<tr>";
-        result += "<td style='display:none'>" + list[i]["key"] + "</td>";
+        result += "<td style='display:none' class='service_key'>" + list[i]["key"] + "</td>";
         for (var j = 0; j < params.length; j++) {
             var cellValue = list[i][params[j]];
             if (cellValue == null) {
                 cellValue = "";
             }
-            result += "<td>" + cellValue + "</td>";
+            if (j == 0)
+				result += "<td class='client_name'>" + cellValue + "</td>";
+			 if (j == 1)
+				result += "<td class='client_comment'>" + cellValue + "</td>";
         }
         result += "<td>" + extra + "</td>";
         result += "</tr>";
@@ -861,4 +904,8 @@ function updateClientsList() {
 									<i class='icon-pencil'></i></a>";
         $("#clients_table tbody").html(buildHtmlTable(JSON.parse(clients), ["name", "comment"], extra));
     });
+}
+
+function loadGame(link){
+	$("#game").load(link);
 }
