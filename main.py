@@ -49,6 +49,14 @@ class MainPage(webapp2.RequestHandler):
         path = os.path.join(os.path.dirname(__file__), 'project.html')
         self.response.out.write(template.render(path, template_values))
 
+class Catalogue(webapp2.RequestHandler):
+    def get(self):
+        userServices, keyList = data.get2lists(None)
+        template_values = {
+            'userServices': userServices
+        }
+        path = os.path.join(os.path.dirname(__file__), 'catalogue.html')
+        self.response.out.write(template.render(path, template_values))
 
 class ObjectList(webapp2.RequestHandler):
     def get(self):
@@ -196,5 +204,6 @@ class ObjectUpdate(webapp2.RequestHandler):
 application = webapp2.WSGIApplication([('/', MainPage),
                                        ('/object_add/', ObjectAdd),
                                        ('/object_list/', ObjectList),
-                                       ('/object_update/', ObjectUpdate)],
+                                       ('/object_update/', ObjectUpdate),
+									   ('/catalogue', Catalogue)],
                                       debug=True)

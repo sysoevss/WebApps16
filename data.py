@@ -81,8 +81,10 @@ class ClientService(db.Model):
 
 
 def get2lists(user):
-    userServices = ClientService.all().filter("user_id = ", user.user_id()).filter("active = ", True).filter(
-        "service = ", Service.gql("WHERE active =:1", True).get())
+    if not user:
+        userServices = ClientService.all().filter("active = ", True)
+    else:
+        userServices = ClientService.all().filter("user_id = ", user.user_id()).filter("active = ", True)
     keyList = []
     for su in userServices:
         keyList.append(su.service.key())

@@ -142,6 +142,45 @@ $(document).ready(function () {
             })
 
     });
+	
+	$newOfferTable.find(".add_service").click(function (e) {
+        e.preventDefault();
+
+        var $thisTr = $(this).parent().parent();
+
+        var $keyTd = $thisTr.find(".service_key");
+        var $nameTd = $thisTr.find(".service_name");
+        var $userCommentTd = $thisTr.find(".service_user_comment");
+        var $adminCommentTd = $thisTr.find(".service_admin_comment");
+
+        var key = $keyTd.text();
+        var name = $nameTd.text();
+        var adminComment = $adminCommentTd.text();
+        var userComment = $userCommentTd.text();
+
+		$.post("/object_add/", {
+			object_type: "service",
+			name: name,
+			active: "True"
+		}, function () {
+			$.post("/object_update/", {
+				object_type: "offer_service",
+				key: key,
+				name: "",
+				user_comment: "",
+				admin_comment: "",
+				active: "False",
+				admin_answer: "False"
+			}, function () {
+				var $newTr = new_inactive_offer_tr(key,name,userComment, adminComment);
+				$newTr.prependTo("#inactive_offer_table tbody");
+				$thisTr.remove();
+			})
+            .fail(function () {
+                alert("Упс, что-то пошло не так")
+            })
+		})
+    });
 
     $newOfferTable.find(".answer_offer").click(function (e) {
         e.preventDefault();
