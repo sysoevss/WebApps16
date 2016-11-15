@@ -165,3 +165,24 @@ def update_offer(key, name="", user_comment="", admin_comment="", active=True, a
     if adminAnswer != "":
         offer.adminAnswer = adminAnswer
     offer.put()
+	
+	
+class UserEvent(db.Model):
+    comment = db.StringProperty(multiline=True)
+    user_id = db.StringProperty()
+    event_date = db.DateTimeProperty()
+    client = db.ReferenceProperty(Client)
+    duration = db.IntegerProperty()
+    
+def addUserEvent(client_key, comment, user_id, event_date, duration):
+    client = Client.get(client_key)
+    UE = UserEvent()
+    UE.comment = comment
+    UE.user_id = user_id
+    UE.event_date = event_date
+    UE.duration = duration
+    UE.client = client
+    UE.put()
+    return UE.key()
+    
+	

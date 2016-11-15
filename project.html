@@ -160,8 +160,34 @@
           <div class="inner" id="tt_container" style="display:none;">
             <div id="tt_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Here to be timetable</small>
+                <small>Расписание</small>
               </h2>
+              <div>
+              <table id="new_event">
+              
+              <tr>
+              <td>Клиент:</td>
+              <td> 
+                <select id="event_client">
+                {% for c in clients %}
+                <option value="{{c.key}}" >
+                {{c.name}}
+                </option>
+                {% endfor %}
+                </select>
+              </td>
+              </tr>
+              
+              <tr>
+              <td>Дата и время встречи</td>
+              <td> 
+                <input type="date">
+                </input>
+              </td>
+              </tr>
+              
+              </table>
+              </div>
 
             </div>
           </div> <!-- /container -->

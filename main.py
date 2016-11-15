@@ -14,7 +14,7 @@ from data import Service
 import os
 import data
 import json
-
+import datetime
 
 def json_list(list, param_list):
     lst = []
@@ -130,6 +130,15 @@ class ObjectAdd(webapp2.RequestHandler):
             user_comment = self.request.get('user_comment')
             user_id = user.user_id()
             newKey = data.add_offer(user_id, name, user_comment)
+            self.response.out.write(str(newKey))
+            return
+        elif object_type == "user_event":
+            client_key = self.request.get('client_key')
+            comment = self.request.get('comment')
+            user_id = user.user_id()
+            event_date = datetime.datetime(self.request.get('event_date'))
+            duration = int(self.request.get('duration'))
+            newKey = addUserEvent(client_key, comment, user_id, event_date, duration)
             self.response.out.write(str(newKey))
             return
 
