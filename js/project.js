@@ -801,6 +801,65 @@ $(document).ready(function () {
 
 
     });
+    
+    
+    var $addEventTable = $("#new_event");
+    var $events_table = $("#events_table")
+
+    $addEventTable.find("#add_new_event").click(function (e) {
+        e.preventDefault();
+        
+        var $client = $addEventTable.find("#event_client");
+        var $eventDate = $addEventTable.find("#event_date");
+        var $eventTime = $addEventTable.find("#event_time");
+        var $eventDuration = $addEventTable.find("#duration");
+        var $eventComment = $addEventTable.find("#comment");
+
+        var the_client = $client.val();
+        var client_name = $("#event_client option:selected").text();
+        var the_date = $eventDate.val();
+        var the_time = $eventTime.val();
+        var the_duration = $eventDuration.val();
+        var the_comment = $eventComment.val();
+
+        if (!the_client || the_client == "") {
+            alert("Не указан клиент!");
+            return;
+        }
+        
+        if (!the_date || the_date == "") {
+            alert("Не указана дата!");
+            return;
+        }
+        
+        if (!the_time || the_time == "") {
+            alert("Не указано время!");
+            return;
+        }
+        
+        if (!the_duration || the_duration == "") {
+            alert("Не указана длительность!");
+            return;
+        }
+
+        $.post("/object_add/", {object_type: "user_event", client_key: the_client, comment: the_comment, event_date: the_date, event_time: the_time, duration: the_duration}, function () {
+            
+            // $client.val("");
+            // $eventDate.val("");
+            // $eventTime.val("");
+            // $eventDuration.val("");
+            // $eventComment.val("");
+            
+            var $newTr = new_event_tr(client_name, the_date,the_time,the_duration,the_comment);
+
+            $newTr.prependTo("#events_table tbody");            
+            
+        })
+            .fail(function () {
+                alert("Вы пытаетесь добавить событие, которое пересекается с созданными ранее!")
+            })
+
+    });
 
 
     //

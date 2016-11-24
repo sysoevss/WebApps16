@@ -71,6 +71,19 @@ function new_offer_tr(key, name, comment) {
     return $newTr;
 }
 
+function new_event_tr(client_name, date, time, duration, comment){
+    var $newTr = $("#events_table").find(".event_template");
+        
+    $newTr.find(".client").text(client_name);
+    $newTr.find(".date").text(date);
+    $newTr.find(".time").text(time);
+    $newTr.find(".duration").text(duration);
+    $newTr.find(".comment").text(comment);
+    $newTr.removeClass("event_template").removeAttr("style");
+    
+    return $newTr;
+}
+
 function new_active_tr(key, name) {
     var $newTr = $("#active_service_table").find(".service_template").clone(true, true);
     $newTr.find("td.service_name").text(name);

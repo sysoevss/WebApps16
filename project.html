@@ -179,14 +179,76 @@
               </tr>
               
               <tr>
-              <td>Дата и время встречи</td>
+              <td>Дата встречи:</td>
               <td> 
-                <input type="date">
+                <input type="date" id="event_date">
                 </input>
               </td>
               </tr>
               
+              <tr>
+              <td>Время встречи:</td>
+              <td> 
+                <input type="time" id="event_time">
+                </input>
+              </td>
+              </tr>
+              
+              <tr>
+              <td>Длительность:</td>
+              <td><input type="number" id="duration"></input></td>
+              <td>минут</td>
+              </tr>
+              
+              <tr>
+              <td>Комментарий</td>
+              <td><textarea id="comment"></textarea></td>
+              </tr>
+              
+              <tr>
+              <td></td>
+              <td><button id="add_new_event">Добавить</button><td>
+              </tr>
+              
               </table>
+              
+              
+              <table class="table table-bordered" id="events_table">
+                <thead>
+                <tr>
+                  <th><b>Клиент</b></th>
+                  <th><b>Дата</b></th>
+                  <th><b>Время</b></th>
+                  <th><b>Длительность, минут</b></th>
+                  <th><b>Комментарий</b></th>
+                  <td></td>
+                </tr>
+                </thead>
+                
+                <tbody>
+                <tr class="event_template" style="display:none">
+                <td class="client"></td>
+                <td class="date"></td>
+                <td class="time"></td>
+                <td class="duration"></td>
+                <td class="comment"></td>
+                </tr>
+                
+                {% for ev in events %}
+                <tr>
+                  <td>{{ ev.client.name }}</td>
+                  <td>{{ ev.event_date.date}}</td>
+                  <td>{{ ev.event_time.time }}</td>
+                  <td>{{ ev.duration }}</td>
+                  <td>{{ ev.comment }}</td>
+                </tr>
+                {% endfor %}
+                
+                </tbody>
+                
+                </table>
+              
+              
               </div>
 
             </div>

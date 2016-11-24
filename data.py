@@ -171,18 +171,30 @@ class UserEvent(db.Model):
     comment = db.StringProperty(multiline=True)
     user_id = db.StringProperty()
     event_date = db.DateTimeProperty()
+    event_time = db.DateTimeProperty()
     client = db.ReferenceProperty(Client)
     duration = db.IntegerProperty()
     
-def addUserEvent(client_key, comment, user_id, event_date, duration):
+def addUserEvent(client_key, comment, user_id, event_date, event_time, duration):
     client = Client.get(client_key)
     UE = UserEvent()
     UE.comment = comment
     UE.user_id = user_id
     UE.event_date = event_date
+    UE.event_time = event_time
     UE.duration = duration
     UE.client = client
     UE.put()
     return UE.key()
+    
+def getUserEvents(user_id):
+    events = sorted(UserEvent.all().filter("user_id = ", user_id),key=moment)
+    return events
+    
+def moment(ev):
+    the_moment = ev.event_date
+    the_moment = the_moment.replace(hour=ev.event_time.hour)
+    the_moment = the_moment.replace(minute=ev.event_time.minute)
+    return the_moment
     
 	
