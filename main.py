@@ -44,7 +44,8 @@ class MainPage(webapp2.RequestHandler):
             'userOffers': data.get_user_offers(user.user_id()),
             'newOffers': data.get_new_offer(),
             'offersWithComment': data.get_offer_with_comment(),
-            'inactiveOffers': data.get_inactive_offers()
+            'inactiveOffers': data.get_inactive_offers(),
+            'events': data.getUserEvents(user.user_id())
         }
         path = os.path.join(os.path.dirname(__file__), 'project.html')
         self.response.out.write(template.render(path, template_values))
@@ -99,6 +100,7 @@ class ObjectAdd(webapp2.RequestHandler):
 
     def post(self):
         user = users.get_current_user()
+        events = data.getUserEvents(user.user_id())
         if not user:
             self.response.out.write('ERROR: NO USER')
             return
@@ -136,9 +138,26 @@ class ObjectAdd(webapp2.RequestHandler):
             client_key = self.request.get('client_key')
             comment = self.request.get('comment')
             user_id = user.user_id()
-            event_date = datetime.datetime(self.request.get('event_date'))
+            event_date = datetime.datetime.strptime(self.request.get('event_date'),"%Y-%m-%d")
+            event_time = datetime.datetime.strptime(self.request.get('event_time'),"%H:%M")
             duration = int(self.request.get('duration'))
-            newKey = addUserEvent(client_key, comment, user_id, event_date, duration)
+            for an_event in events:
+                moment = event_date
+                moment = moment.replace(hour=event_time.hour)
+                moment = moment.replace(minute=event_time.minute)
+                engaged = an_event.event_date
+                engaged = engaged.replace(hour=an_event.event_time.hour)
+                engaged = engaged.replace(minute=an_event.event_time.minute)
+                delta = moment - engaged
+                moment_dur = datetime.timedelta(minutes=duration)
+                engaged_dur = datetime.timedelta(minutes=an_event.duration)
+                if delta > datetime.timedelta(days=0,hours=0,minutes=0):
+                    if delta < engaged_dur:
+                        newKey = 10 / 0
+                if delta < datetime.timedelta(days=0,hours=0,minutes=0):
+                    if -delta < moment_dur:
+                        newKey = 10 / 0
+            newKey = data.addUserEvent(client_key, comment, user_id, event_date, event_time, duration)
             self.response.out.write(str(newKey))
             return
 
