@@ -808,10 +808,10 @@ $(document).ready(function () {
 
     $addEventTable.find("#add_new_event").click(function (e) {
         e.preventDefault();
-        
+		
         var $client = $addEventTable.find("#event_client");
-        var $eventDate = $addEventTable.find("#event_date");
-        var $eventTime = $addEventTable.find("#event_time");
+        var $eventDate = $addEventTable.find("#date");
+        var $eventTime = $addEventTable.find("#time");
         var $eventDuration = $addEventTable.find("#duration");
         var $eventComment = $addEventTable.find("#comment");
 
@@ -842,15 +842,15 @@ $(document).ready(function () {
             return;
         }
 
-        $.post("/object_add/", {object_type: "user_event", client_key: the_client, comment: the_comment, event_date: the_date, event_time: the_time, duration: the_duration}, function () {
+        $.post("/object_add/", {object_type: "user_event", client_key: the_client, comment: the_comment, event_date: the_date, event_time: the_time, duration: the_duration}, function (key) {
             
             // $client.val("");
             // $eventDate.val("");
             // $eventTime.val("");
             // $eventDuration.val("");
             // $eventComment.val("");
-            
-            var $newTr = new_event_tr(client_name, the_date,the_time,the_duration,the_comment);
+            //alert(key);
+            var $newTr = new_event_tr(key, client_name, the_date,the_time,the_duration,the_comment);
 
             $newTr.prependTo("#events_table tbody");            
             
@@ -860,7 +860,134 @@ $(document).ready(function () {
             })
 
     });
+	
+	$events_table.find(".delete_event").click(function (e) {
+        e.preventDefault();
+        var result = confirm("Вы действительно хотите удалить это событие?");
 
+        if (!result)
+            return;
+        var $thisTr = $(this).parent().parent();
+
+        var $key = $thisTr.find("td.event_key");
+        var key = $key.text();
+        $.post("/object_update/", {
+            object_type: "event",
+			key : key,
+            client: "",
+			comment: "",
+			user_id: "",
+			event_date: "",
+			event_time: "",
+			duration: "", 
+			active: "False"
+        }, function () {
+
+            $thisTr.remove();
+            //var $newTr = new_inactive_tr(key, name);
+            //$newTr.prependTo("#inactive_service_table tbody");
+
+        }).fail(function () {
+            alert("Упс, что-то пошло не так")
+        })
+    });
+	
+	
+	$events_table.find(".edit_event").click(function (e) {
+        e.preventDefault();
+
+        var $thisTr = $(this).parent().parent();
+
+        var $key = $thisTr.find("td.event_key");
+        var key = $key.text();
+		var client = $thisTr.find("td.event_cl").text();
+		//alert(client);
+        var client_name = $thisTr.find("#event_cl option:selected").text();
+		//alert(client_name);
+		var comment = $thisTr.find("td.comment").text();
+		var event_date = $thisTr.find("td.date").text();
+		
+		var event_time = $thisTr.find("td.time").text();
+		var duration = $thisTr.find("td.duration").text();
+        //alert(event_time + " " + event_date + " " + client_name);
+        var $form = form_edit_event(key, client, client_name, comment, event_date, event_time, duration);
+
+        $form.insertAfter($thisTr);
+
+        $thisTr.remove();
+    })
+	
+	
+	
+	$(document).on('click', 'a[class^="btn-small btn-success accept_event_changes"]', function (e) {
+		e.preventDefault();
+        var $thisTr = $(this).parent().parent();
+
+        var key = $thisTr.find("input.event_key").val();
+		var client = $thisTr.find("#event_cl").val();
+        var client_name = $thisTr.find("#event_cl option:selected").text();
+		
+		var comment = $thisTr.find("input.comment").val();
+		var event_date = $thisTr.find("input.date").val();
+		var event_time = $thisTr.find("input.time").val();
+		var duration = $thisTr.find("input.duration").val();
+		var active = "True";
+		if (!client || client == "") {
+            alert("Не указан клиент!");
+            return;
+        }
+        
+        if (!event_date || event_date == "") {
+            alert("Не указана дата!");
+            return;
+        }
+        
+        if (!event_time || event_time == "") {
+            alert("Не указано время!");
+            return;
+        }
+        
+        if (!duration || duration == "") {
+            alert("Не указана длительность!");
+            return;
+        }
+        $.post("/object_update/", {
+            object_type: "event",
+			key : key,
+            client: client,
+			comment: comment,
+			user_id: "",
+			event_date: event_date,
+			event_time: event_time,
+			duration: duration, 
+			active: active
+        }, function () {
+            var $newTr = new_event_tr(key, client_name, event_date, event_time, duration, comment);
+
+            $newTr.insertAfter($thisTr);
+            $thisTr.remove();
+        }).fail(function () {
+            alert("Вы пытаетесь добавить событие, которое пересекается с созданными ранее!")
+        })
+    });
+	
+	$(document).on('click', 'a[class^="btn-small btn-danger cancel_event_changes"]', function (e) {
+        e.preventDefault();
+        var $thisTr = $(this).parent().parent();
+        var key = $thisTr.find("input.event_key").val();
+		var client = $thisTr.find("#event_cl").val();
+        var client_name = $thisTr.find("#event_cl option:selected").text();
+		var comment = $thisTr.find("input.comment").val();
+		var event_date = $thisTr.find("input.date").val();
+		var event_time = $thisTr.find("input.time").val();
+		var duration = $thisTr.find("input.duration").val();
+
+        var $newTr = new_event_tr(key, client_name, event_date, event_time, duration, comment);
+
+        $newTr.insertAfter($thisTr);
+        $thisTr.remove();
+
+    });
 
     //
     //

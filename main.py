@@ -185,6 +185,7 @@ class ObjectUpdate(webapp2.RequestHandler):
 
     def post(self):
         user = users.get_current_user()
+        events = data.getUserEvents(user.user_id())
         if not user:
             self.response.out.write('ERROR: NO USER')
             return
@@ -225,6 +226,39 @@ class ObjectUpdate(webapp2.RequestHandler):
                               adminAnswer=admin_answer)
             self.response.out.write("OK")
             return
+        elif object_type == "event":
+            key = self.request.get('key')
+            comment = self.request.get('comment')
+            user_id = ""
+            active = self.request.get('active') == "True"
+            client = self.request.get('client')
+            event_date = ""
+            event_time = ""
+            duration = ""
+            if active == True:
+                event_date = datetime.datetime.strptime(self.request.get('event_date'),"%Y-%m-%d")
+                event_time = datetime.datetime.strptime(self.request.get('event_time'),"%H:%M")
+                duration = int(self.request.get('duration'))
+                for an_event in events:
+                    moment = event_date
+                    moment = moment.replace(hour=event_time.hour)
+                    moment = moment.replace(minute=event_time.minute)
+                    engaged = an_event.event_date
+                    engaged = engaged.replace(hour=an_event.event_time.hour)
+                    engaged = engaged.replace(minute=an_event.event_time.minute)
+                    delta = moment - engaged
+                    moment_dur = datetime.timedelta(minutes=duration)
+                    engaged_dur = datetime.timedelta(minutes=an_event.duration)
+                    if delta > datetime.timedelta(days=0,hours=0,minutes=0):
+                        if delta < engaged_dur:
+                            newKey = 10 / 0
+                    if delta < datetime.timedelta(days=0,hours=0,minutes=0):
+                        if -delta < moment_dur:
+                            newKey = 10 / 0
+                        
+            data.update_event(key, comment=comment, user_id=user_id, event_date=event_date, event_time=event_time, client=client, duration=duration, active=active)
+            self.response.out.write("OK")
+            return
 
         self.response.out.write('ERROR: UNSUPPORTED OBJECT')
 
@@ -233,5 +267,5 @@ application = webapp2.WSGIApplication([('/', MainPage),
                                        ('/object_add/', ObjectAdd),
                                        ('/object_list/', ObjectList),
                                        ('/object_update/', ObjectUpdate),
-									   ('/catalogue', Catalogue)],
+                                       ('/catalogue', Catalogue)],
                                       debug=True)

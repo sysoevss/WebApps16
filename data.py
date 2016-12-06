@@ -9,6 +9,7 @@ from google.appengine.api import users
 
 import datetime
 import time
+import logging
 
 
 def force_unicode(string):
@@ -165,8 +166,8 @@ def update_offer(key, name="", user_comment="", admin_comment="", active=True, a
     if adminAnswer != "":
         offer.adminAnswer = adminAnswer
     offer.put()
-	
-	
+    
+    
 class UserEvent(db.Model):
     comment = db.StringProperty(multiline=True)
     user_id = db.StringProperty()
@@ -174,6 +175,7 @@ class UserEvent(db.Model):
     event_time = db.DateTimeProperty()
     client = db.ReferenceProperty(Client)
     duration = db.IntegerProperty()
+    active = db.BooleanProperty(default=True)
     
 def addUserEvent(client_key, comment, user_id, event_date, event_time, duration):
     client = Client.get(client_key)
@@ -187,8 +189,29 @@ def addUserEvent(client_key, comment, user_id, event_date, event_time, duration)
     UE.put()
     return UE.key()
     
+def update_event(key, comment="", user_id="", event_date="", event_time="", client="", duration="", active = True):
+    event = UserEvent.get(key)
+    logging.info("client key = "+client)
+    if comment != "":
+        event.comment = comment
+    if user_id != "":
+        event.user_id = user_id
+    if event_date != "":
+        event.event_date = event_date
+    if event_time != "":
+        event.event_time = event_time
+    if active != "":
+        event.active = active
+    if client != "":
+        logging.info("client key = "+client)
+        cl = Client.get(client)
+        event.client = cl
+    if duration != "":
+        event.duration = duration
+    event.put()
+    
 def getUserEvents(user_id):
-    events = sorted(UserEvent.all().filter("user_id = ", user_id),key=moment)
+    events = sorted(UserEvent.all().filter("user_id = ", user_id).filter("active = ", True),key=moment)
     return events
     
 def moment(ev):
@@ -197,4 +220,4 @@ def moment(ev):
     the_moment = the_moment.replace(minute=ev.event_time.minute)
     return the_moment
     
-	
+    

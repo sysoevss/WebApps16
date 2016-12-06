@@ -71,10 +71,10 @@ function new_offer_tr(key, name, comment) {
     return $newTr;
 }
 
-function new_event_tr(client_name, date, time, duration, comment){
-    var $newTr = $("#events_table").find(".event_template");
-        
-    $newTr.find(".client").text(client_name);
+function new_event_tr(key, client_name, date, time, duration, comment){
+    var $newTr = $("#events_table").find(".event_template").clone(true, true, true, true, true, true);
+    $newTr.find(".event_key").text(key);
+    $newTr.find(".event_cl").text(client_name);
     $newTr.find(".date").text(date);
     $newTr.find(".time").text(time);
     $newTr.find(".duration").text(duration);
@@ -82,6 +82,33 @@ function new_event_tr(client_name, date, time, duration, comment){
     $newTr.removeClass("event_template").removeAttr("style");
     
     return $newTr;
+}
+
+
+function form_edit_event(key, client, client_name, comment, event_date, event_time, duration) {
+    var $form = $("#events_table").find(".event_edit").clone(true, true, true, true, true, true);
+    $form.find("select#event_cl option").filter(function() { return $.trim( $(this).text() ) == $.trim(client); }).attr('selected',true);
+    $form.find("input.comment").val(comment);
+    $form.find("input.event_key").val(key);
+    var now = new Date(Date.parse(event_date));
+    var day = ("0" + now.getDate()).slice(-2);
+    var month = ("0" + (now.getMonth() + 1)).slice(-2);
+
+    var today = now.getFullYear()+"-"+(month)+"-"+(day) ;
+    $form.find("input.date").val(today);
+    
+    var d = new Date();
+    var time = event_time.match(/(\d+)(?::(\d\d))?\s*(p?)/);
+    d.setHours( parseInt(time[1]) + (time[3] ? 12 : 0) );
+    d.setMinutes( parseInt(time[2]) || 0 );
+    var h = d.getHours();
+    var m = d.getMinutes();
+    if(h < 10) h = '0' + h; 
+    if(m < 10) m = '0' + m; 
+    $form.find("input.time").val(h+':'+m);
+    $form.find("input.duration").val(duration);
+    $form.removeAttr("style").removeClass("event_edit");
+    return $form;
 }
 
 function new_active_tr(key, name) {
