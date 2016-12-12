@@ -181,7 +181,7 @@
               <tr>
               <td>Дата встречи:</td>
               <td> 
-                <input type="date" id="event_date">
+                <input type="date" id="date">
                 </input>
               </td>
               </tr>
@@ -189,7 +189,7 @@
               <tr>
               <td>Время встречи:</td>
               <td> 
-                <input type="time" id="event_time">
+                <input type="time" id="time">
                 </input>
               </td>
               </tr>
@@ -227,20 +227,66 @@
                 
                 <tbody>
                 <tr class="event_template" style="display:none">
-                <td class="client"></td>
+				<td style="display:none" class="event_key"></td>
+                <td class="event_cl"></td>
                 <td class="date"></td>
                 <td class="time"></td>
                 <td class="duration"></td>
                 <td class="comment"></td>
+				<td>
+                    <a class="btn-small btn-warning delete_event" href="#" title="Delete event">
+                      <i class="icon-trash"></i></a>
+                    <a class="btn-small btn-warning edit_event" href="#" title="Edit event">
+                      <i class="icon-pencil"></i></a>
+                  </td>
                 </tr>
-                
+				
+                <tr class="event_edit warning" style="display:none">
+				<td style="display:none">
+				  <input type="hidden" class="event_key">
+				</td>
+				  <td>
+				  <select id="event_cl">
+                  {% for c in clients %}
+                  <option value="{{c.key}}" >
+                  {{c.name}}
+                  </option>
+                  {% endfor %}
+                  </select>
+				 </td>
+				 <td>
+				<input style="width:90%" type="date" class="btn-mini date">
+				 </td>
+				 <td>
+				<input style="width:90%" type="time" class="btn-mini time">
+				 </td>
+				 <td>
+				<input style="width:90%" type="number" class="btn-mini duration">
+				 </td>
+				 <td>
+				<input style="width:90%" type="text" class="btn-mini comment">
+				 </td>
+				 <td>
+                <a class="btn-small btn-success accept_event_changes" href="#" title="Принять">
+                  <i class="icon-ok"></i></a>
+                <a class="btn-small btn-danger cancel_event_changes" href="#" title="Отмена">
+                  <i class="icon-remove"></i></a>
+				  </td>
+				</tr>
                 {% for ev in events %}
                 <tr>
-                  <td>{{ ev.client.name }}</td>
-                  <td>{{ ev.event_date.date}}</td>
-                  <td>{{ ev.event_time.time }}</td>
-                  <td>{{ ev.duration }}</td>
-                  <td>{{ ev.comment }}</td>
+				  <td style="display:none" class="event_key">{{ev.key}}</td>
+                  <td class="event_cl">{{ ev.client.name }}</td>
+                  <td class="date">{{ ev.event_date.date}}</td>
+                  <td class="time">{{ ev.event_time.time }}</td>
+                  <td class="duration">{{ ev.duration }}</td>
+                  <td class="comment">{{ ev.comment }}</td>
+				  <td>
+                    <a class="btn-small btn-warning delete_event" href="#" title="Delete event">
+                      <i class="icon-trash"></i></a>
+                    <a class="btn-small btn-warning edit_event" href="#" title="Edit event">
+                      <i class="icon-pencil"></i></a>
+                  </td>
                 </tr>
                 {% endfor %}
                 
