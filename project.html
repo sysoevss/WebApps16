@@ -83,6 +83,7 @@
             {% endif %}
             <li><a href="#" id="reference">Справка</a></li>
           </ul>
+          <ul style="padding-top: 10px;"><a href="{{logOut}}" title="Выход" style="color: white;">Выход</a></ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
@@ -314,9 +315,9 @@
           <div class="inner" id="assistants_container" style="display:none;">
             <div id="assistants_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Here to be assistants</small>
+                <small>Ассистенты</small>
               </h2>
-
+                {% include "./tabs/assistants.html" %}
             </div>
           </div> <!-- /container -->
 

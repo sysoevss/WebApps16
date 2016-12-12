@@ -34,6 +34,29 @@ def addService(name, active):
     service.put()
     return service.key()
 
+class Assistants(db.Model):
+    user = db.UserProperty()
+    assistant_email = db.EmailProperty()
+    active = db.BooleanProperty()
+
+
+def getAssistant():
+    assistants = Assistants.all().filter("active = ", True).filter("user = ", users.get_current_user()).fetch(1000)
+    return assistants
+
+
+def addAssistant(assis_email):
+    assistant = Assistants()
+    assistant.user = users.get_current_user()
+    assistant.assistant_email = db.Email(assis_email)
+    assistant.active = True
+    assistant.put()
+
+def updateAssist(key, email, active):
+    assist = Assistants.get(key)
+    assist.assistent_email = db.Email(email)
+    assist.active = active
+    assist.put()
 
 class Client(db.Model):
     name = db.StringProperty(multiline=False)
@@ -45,7 +68,13 @@ class Client(db.Model):
 
 
 def getClientsList():
-    return db.GqlQuery("SELECT * FROM Client WHERE user = :1 AND active = True", users.get_current_user()).fetch(1000)
+    assistants = Assistants.all().filter("active = ", True).filter("assistant_email = ",
+                                                                   users.get_current_user().email()).fetch(1000)
+    user_for_as = [users.get_current_user()]
+    for a in assistants:
+        user_for_as.append(a.user)
+    results = Client.all().filter("user IN ", user_for_as).filter("active = ", True).fetch(1000)
+    return results
 
 
 def addClient(name, comment):
@@ -211,7 +240,12 @@ def update_event(key, comment="", user_id="", event_date="", event_time="", clie
     event.put()
     
 def getUserEvents(user_id):
-    events = sorted(UserEvent.all().filter("user_id = ", user_id).filter("active = ", True),key=moment)
+    assistants = Assistants.all().filter("active = ", True).filter("assistant_email = ",
+                                                                   users.get_current_user().email()).fetch(1000)
+    user_for_as = [users.get_current_user().user_id()]
+    for a in assistants:
+        user_for_as.append(a.user.user_id())
+    events = sorted(UserEvent.all().filter("user_id IN ", user_for_as), key=moment)
     return events
     
 def moment(ev):

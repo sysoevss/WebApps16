@@ -36,6 +36,7 @@ class MainPage(webapp2.RequestHandler):
         userServices, keyList = data.get2lists(user)
         template_values = {
             'clients': data.getClientsList(),
+            'assists': data.getAssistant(),
             'isAdmin': users.is_current_user_admin(),
             'activeServices': Service.all().filter("active = ", True),
             'inactiveServices': Service.all().filter("active = ", False),
@@ -45,7 +46,8 @@ class MainPage(webapp2.RequestHandler):
             'newOffers': data.get_new_offer(),
             'offersWithComment': data.get_offer_with_comment(),
             'inactiveOffers': data.get_inactive_offers(),
-            'events': data.getUserEvents(user.user_id())
+            'events': data.getUserEvents(user.user_id()),
+            'logOut': users.create_logout_url('/')
         }
         path = os.path.join(os.path.dirname(__file__), 'project.html')
         self.response.out.write(template.render(path, template_values))
@@ -72,6 +74,10 @@ class ObjectList(webapp2.RequestHandler):
             self.response.out.write(json_list(data.getClientsList(), ['name', 'comment']))
             return
 
+        elif object == 'assist':
+            self.response.out.write(json_list(data.getAssistant(), ['assistant_email']))
+            return
+
         self.response.out.write('ERROR: UNSUPPORTED OBJECT')
 
 
@@ -94,6 +100,11 @@ class ObjectAdd(webapp2.RequestHandler):
             active = self.request.get('active')
             key = data.addService(name, active)
             self.response.out.write({key: key})
+            return
+        elif object_type == "assist":
+            email = self.request.get('email')
+            key = data.addAssistant(email)
+            self.response.out.write('OK')
             return
 
         self.response.out.write('ERROR: UNSUPPORTED OBJECT')
@@ -160,6 +171,11 @@ class ObjectAdd(webapp2.RequestHandler):
             newKey = data.addUserEvent(client_key, comment, user_id, event_date, event_time, duration)
             self.response.out.write(str(newKey))
             return
+        elif object_type == "assist":
+            email = self.request.get('email')
+            key = data.addAssistant(email)
+            self.response.out.write('OK')
+            return
 
         self.response.out.write('ERROR: UNSUPPORTED OBJECT')
 
@@ -178,6 +194,13 @@ class ObjectUpdate(webapp2.RequestHandler):
             comment = self.request.get('comment')
             active = (self.request.get('active') == "True")
             data.updateClient(key, name, comment, active)
+            self.response.out.write('OK')
+            return
+        elif object_type == "assist":
+            key = self.request.get('key')
+            email = self.request.get('email')
+            active = (self.request.get('active') == "True")
+            data.updateAssist(key, email, active)
             self.response.out.write('OK')
             return
 
@@ -225,6 +248,13 @@ class ObjectUpdate(webapp2.RequestHandler):
             data.update_offer(key, name=name, user_comment=user_comment, admin_comment=admin_comment, active=active,
                               adminAnswer=admin_answer)
             self.response.out.write("OK")
+            return
+        elif object_type == "assist":
+            key = self.request.get('key')
+            email = self.request.get('email')
+            active = (self.request.get('active') == "True")
+            data.updateAssist(key, email, active)
+            self.response.out.write('OK')
             return
         elif object_type == "event":
             key = self.request.get('key')
