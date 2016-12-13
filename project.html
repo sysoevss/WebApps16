@@ -10,6 +10,9 @@
   <!-- Styles -->
   <link href="/css/main.css" rel="stylesheet">
   <link href="/css/bootstrap.css" rel="stylesheet">
+  <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="/css/jquery-ui.css" rel="stylesheet">
+  <link href="/css/dataTables.jqueryui.min.css" rel="stylesheet">
   <style>
     body {
       padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -30,7 +33,7 @@
     }
 
     input.btn-mini {
-      height: auto;
+-      height: auto;
       line-height: 14px;
       font-size: 12px;
       width: 115px;
@@ -60,6 +63,14 @@
   <script type="text/javascript" src="/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="/js/template.f.js"></script>
   <script type="text/javascript" src="/js/project.js"></script>
+  <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/js/dataTables.jqueryui.min.js"></script>
+
+  <script>
+	$(document).ready(function(){
+		$('#events_table').DataTable();
+	});
+  </script>
 
 </head>
 
@@ -114,7 +125,7 @@
                   <td><a class="btn-small btn-success" href="#" id='add_client' title="Add"><i
                       class="icon-plus"></i></a></td>
                 </tr>
-				
+
 				 <!--Edit client - class for clone-->
 				<tr class="client_edit warning" style="display:none">
 				<td style="display:none">
@@ -133,7 +144,7 @@
                   <i class="icon-remove"></i></a>
 				  </td>
 				</tr>
-				
+
                 </thead>
                 <tbody>
 
@@ -152,7 +163,7 @@
                 {% endfor %}
 
                 </tbody>
-				
+
               </table>
             </div>
           </div> <!-- /container -->
@@ -165,10 +176,10 @@
               </h2>
               <div>
               <table id="new_event">
-              
+
               <tr>
               <td>Клиент:</td>
-              <td> 
+              <td>
                 <select id="event_client">
                 {% for c in clients %}
                 <option value="{{c.key}}" >
@@ -178,42 +189,42 @@
                 </select>
               </td>
               </tr>
-              
+
               <tr>
               <td>Дата встречи:</td>
-              <td> 
+              <td>
                 <input type="date" id="date">
                 </input>
               </td>
               </tr>
-              
+
               <tr>
               <td>Время встречи:</td>
-              <td> 
+              <td>
                 <input type="time" id="time">
                 </input>
               </td>
               </tr>
-              
+
               <tr>
               <td>Длительность:</td>
               <td><input type="number" id="duration"></input></td>
               <td>минут</td>
               </tr>
-              
+
               <tr>
               <td>Комментарий</td>
               <td><textarea id="comment"></textarea></td>
               </tr>
-              
+
               <tr>
               <td></td>
               <td><button id="add_new_event">Добавить</button><td>
               </tr>
-              
+
               </table>
-              
-              
+
+
               <table class="table table-bordered" id="events_table">
                 <thead>
                 <tr>
@@ -222,56 +233,58 @@
                   <th><b>Время</b></th>
                   <th><b>Длительность, минут</b></th>
                   <th><b>Комментарий</b></th>
-                  <td></td>
+                  <th></th>
+                  <th></th>
+
                 </tr>
                 </thead>
-                
+
                 <tbody>
                 <tr class="event_template" style="display:none">
-				<td style="display:none" class="event_key"></td>
-                <td class="event_cl"></td>
-                <td class="date"></td>
-                <td class="time"></td>
-                <td class="duration"></td>
-                <td class="comment"></td>
-				<td>
-                    <a class="btn-small btn-warning delete_event" href="#" title="Delete event">
-                      <i class="icon-trash"></i></a>
-                    <a class="btn-small btn-warning edit_event" href="#" title="Edit event">
-                      <i class="icon-pencil"></i></a>
-                  </td>
+                  <td style="display:none" class="event_key"></td>
+                  <td class="event_cl"></td>
+                  <td class="date"></td>
+                  <td class="time"></td>
+                  <td class="duration"></td>
+                  <td class="comment"></td>
+                  <td>
+                      <a class="btn-small btn-warning delete_event" href="#" title="Delete event">
+                        <i class="icon-trash"></i></a>
+                      <a class="btn-small btn-warning edit_event" href="#" title="Edit event">
+                        <i class="icon-pencil"></i></a>
+                    </td>
                 </tr>
-				
+
                 <tr class="event_edit warning" style="display:none">
-				<td style="display:none">
-				  <input type="hidden" class="event_key">
-				</td>
+                  <td style="display:none">
+                    <input type="hidden" class="event_key">
+                  </td>
 				  <td>
-				  <select id="event_cl">
-                  {% for c in clients %}
-                  <option value="{{c.key}}" >
-                  {{c.name}}
-                  </option>
-                  {% endfor %}
-                  </select>
+                    <select id="event_cl">
+                    {% for c in clients %}
+                      <option value="{{c.key}}" >
+                      {{c.name}}
+                      </option>
+                    {% endfor %}
+                    </select>
 				 </td>
 				 <td>
-				<input style="width:90%" type="date" class="btn-mini date">
+                  <input style="width:90%" type="date" class="btn-mini date">
 				 </td>
 				 <td>
-				<input style="width:90%" type="time" class="btn-mini time">
+				  <input style="width:90%" type="time" class="btn-mini time">
 				 </td>
 				 <td>
-				<input style="width:90%" type="number" class="btn-mini duration">
+				  <input style="width:90%" type="number" class="btn-mini duration">
 				 </td>
 				 <td>
-				<input style="width:90%" type="text" class="btn-mini comment">
+				  <input style="width:90%" type="text" class="btn-mini comment">
 				 </td>
 				 <td>
-                <a class="btn-small btn-success accept_event_changes" href="#" title="Принять">
-                  <i class="icon-ok"></i></a>
-                <a class="btn-small btn-danger cancel_event_changes" href="#" title="Отмена">
-                  <i class="icon-remove"></i></a>
+                  <a class="btn-small btn-success accept_event_changes" href="#" title="Принять">
+                    <i class="icon-ok"></i></a>
+                  <a class="btn-small btn-danger cancel_event_changes" href="#" title="Отмена">
+                    <i class="icon-remove"></i></a>
 				  </td>
 				</tr>
                 {% for ev in events %}
@@ -290,12 +303,12 @@
                   </td>
                 </tr>
                 {% endfor %}
-                
+
                 </tbody>
-                
+
                 </table>
-              
-              
+
+
               </div>
 
             </div>
