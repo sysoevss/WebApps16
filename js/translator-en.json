@@ -1,0 +1,70 @@
+{
+	"navbar":{
+		"clients": "Clients",
+		"timetable": "Timetable",
+		"reports": "Reports",
+		"assistants": "Assistants",
+		"games": "Games",
+		"services": "Services",
+		"admin": "Admin page",
+		"about": "About",
+		"exit": "Exit"
+	},
+	"clients":{
+		"list": "Clients list",
+		"name": "Name",
+		"comment": "Comment"
+	},
+	"tt":{
+		"timetable": "Timetable",
+		"client": "Client",
+		"eclient": "Client:",
+		"edate": "Appointment's date:",
+		"etime": "Appointment's time:",
+		"duration": "Duration:",
+		"min": "min",
+		"ecomment": "Comment:",
+		"comment": "Comment",
+		"add": "Add",
+		"date": "Date",
+		"time": "Time",
+		"mduration": "Duration, min"
+	},
+	"games":{
+		"miner": "Minesweeper",
+		"htowers": "Hanoi towers",
+		"choose": "Choose your game"
+	},
+	"about":{
+		"short": "Short info",
+		"instr": "Enjoy yourself"
+	},
+	"servlist": "Services list",
+	"aEmail": "Assistant's e-mail",
+
+	"admin":{
+		"actSer": "Active services",
+		"lockSer": "Inactive services",
+		"userOff": "Users' offers",
+		"title": "Title",
+		"newOff": "New offers",
+		"ansOff": "Offers with admin's response",
+		"delOff": "Deleted offers",
+		"userComment": "User's comment",
+		"adminComment": "Admin's comment"
+	},
+	"services":{
+		"avServ": "Avaliable services",
+		"sugServ": "Suggest service",
+		"title": "Title",
+		"comment": "Comment",
+		"urComment": "Your comment",
+		"adminComment": "Admin's comment"
+	},
+	"catalogue":{
+		"catalogue": "Services catalogue",
+		"serviceList": "Services list",
+		"title": "Title",
+		"comment": "Comment"
+	}
+}
