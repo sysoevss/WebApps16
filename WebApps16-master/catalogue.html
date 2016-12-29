@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title data-localize="catalogue.catalogue">Каталог сервисов</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Styles -->
+  <link href="/css/main.css" rel="stylesheet">
+  <link href="/css/bootstrap.css" rel="stylesheet">
+  <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="/css/jquery-ui.css" rel="stylesheet">
+  <link href="/css/dataTables.jqueryui.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+
+    select.btn-mini {
+      height: auto;
+      line-height: 14px;
+      font-size: 12px;
+      width: 130px;
+    }
+
+    select.btn {
+      -webkit-appearance: button;
+      -moz-appearance: button;
+      appearance: button;
+      padding-right: 16px;
+    }
+
+    input.btn-mini {
+      height: auto;
+      line-height: 14px;
+      font-size: 12px;
+      width: 115px;
+    }
+
+    .navbar-inverse .brand, .navbar-inverse .nav > li > a {
+      color: #ffffff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active > a:focus {
+      text-decoration: underline;
+      font-size: 120%;
+    }
+
+    .table tbody tr.info td {
+      background-color: #ffffff;
+    }
+  </style>
+  <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/js/dataTables.jqueryui.min.js"></script>
+
+  <script>
+	$(document).ready(function(){
+		$('#catalogue_table').DataTable();
+	});
+  </script>
+</head>
+
+<body>
+<div id="all_content">
+  <!-- NAVBAR -->
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid" id="nav_container">
+        <a class="brand" href="#" style="color:#0088cc">WebApps 2016 Catalogue</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- The main container -->
+  <div class="container-fluid" id="main_container">
+    <!-- The main table -->
+    <table class="table">
+      <tr class="success">
+        <td>
+          <!-- Clients TAB -->
+          <div class="inner" id="catalogue_container" style="display:block;">
+            <div id="catalogue_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="catalogue.serviceList">Список сервисов</small>
+              </h2>
+              <table id="catalogue_table"  class="display" cellspacing="0" width="100%">
+                <thead>
+                <tr>
+                  <th><b data-localize="catalogue.title">Наименование</b></th>
+                  <th><b data-localize="catalogue.comment">Комментарий</b></th>
+                </tr>				
+                </thead>
+                <tbody>
+
+                {% for s in userServices %}
+                <tr>
+                  <td class="service_name">{{ s.service.name }}</td>
+                  <td class="service_comment">{{ s.comment }}</td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+				
+              </table>
+            </div>
+          </div> <!-- /container -->
+
+
+        </td>
+      </tr>
+
+
+    </table>
+  </div> <!-- /container -->
+
+  <div class="container-fluid">
+    <small>&copy; Copyright 2016 Web Applications Development Course, SPBU</small>
+  </div>
+
+</div>
+</body>
+</html>

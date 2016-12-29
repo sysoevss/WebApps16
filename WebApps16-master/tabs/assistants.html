@@ -1,0 +1,31 @@
+
+<table class="table table-bordered" id="assists_table">
+  <thead>
+  <tr>
+    <th><b data-localize="aEmail">Email ассистента</b></th>
+    <td></td>
+  </tr>
+  <tr class="warning">
+    <td><input class="btn-mini" id="new_assist_email" type="text" style="width:90%;"/></td>
+    <td><a class="btn-small btn-success" href="#" id='add_assist' title="Add"><i
+            class="icon-plus"></i></a></td>
+  </tr>
+
+  </thead>
+  <tbody>
+
+  {% for c in assists %}
+  <tr>
+    <td style="display:none" class="service_key">{{c.key}}</td>
+    <td class="assist_email">{{ c.assistant_email }}</td>
+    <td>
+      <a class="btn-small btn-warning delete_assist" href="#" title="Delete assist">
+        <i class="icon-trash"></i></a>
+    </td>
+  </tr>
+  {% endfor %}
+
+  </tbody>
+
+</table>
+<script type="text/javascript" src="/js/project.js"></script>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Рабочий кабинет</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Styles -->
+  <link href="/css/main.css" rel="stylesheet">
+  <link href="/css/bootstrap.css" rel="stylesheet">
+  <link href="/css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="/css/jquery-ui.css" rel="stylesheet">
+  <link href="/css/dataTables.jqueryui.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+
+    select.btn-mini {
+      height: auto;
+      line-height: 14px;
+      font-size: 12px;
+      width: 130px;
+    }
+
+    select.btn {
+      -webkit-appearance: button;
+      -moz-appearance: button;
+      appearance: button;
+      padding-right: 16px;
+    }
+
+    input.btn-mini {
+-      height: auto;
+      line-height: 14px;
+      font-size: 12px;
+      width: 115px;
+    }
+
+    .navbar-inverse .brand, .navbar-inverse .nav > li > a {
+      color: #ffffff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    }
+
+    .navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active > a:focus {
+      text-decoration: underline;
+      font-size: 120%;
+    }
+
+    .table tbody tr.info td {
+      background-color: #ffffff;
+    }
+  </style>
+  <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <script type="text/javascript" src="/js/jquery-1.8.2.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/template.f.js"></script>
+  <script type="text/javascript" src="/js/project.js"></script>
+  <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="/js/dataTables.jqueryui.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.localize.js"></script>
+
+  <script>
+	$(document).ready(function(){
+		$('#events_table').DataTable();
+	});
+  </script>
+
+</head>
+
+<body>
+<div id="all_content" style="display:none;">
+  <!-- NAVBAR -->
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid" id="nav_container">
+        <a class="brand" href="#" style="color:#0088cc">WebApps 2016</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav" id="main_menu">
+            <li class="active"><a href="#" id="clients" data-localize="navbar.clients">Клиенты</a></li>
+            <li><a href="#" id="tt" data-localize="navbar.timetable">Расписание</a></li>
+            <li><a href="#" id="reports" data-localize="navbar.reports">Отчеты</a></li>
+            <li><a href="#" id="assistants" data-localize="navbar.assistants">Помощники</a></li>
+            <li><a href="#" id="games" data-localize="navbar.games">Игры</a></li>
+            <li><a href="#" id="services" data-localize="navbar.services">Услуги</a></li>
+            {% if isAdmin %}
+            <li><a href="#" id="adminPage" data-localize="navbar.admin">Admin page</a></li>
+            {% endif %}
+            <li><a href="#" id="reference" data-localize="navbar.about">Справка</a></li>
+          </ul>
+          <ul style="padding-top: 10px;">
+          <a href="{{logOut}}" title="Выход" style="color: white;" data-localize="navbar.exit">Выход</a>
+        	<select id="language_select" style="width: 55px; height: 50%; font-size: 80%; float:right;">
+              <option value="ru">RU</option>
+              <option value="en">EN</option>
+            </select>
+            </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+  </div>
+
+  <!-- The main container -->
+  <div class="container-fluid" id="main_container">
+    <!-- The main table -->
+    <table class="table">
+      <tr class="success">
+        <td>
+          <!-- Clients TAB -->
+          <div class="inner" id="clients_container" style="display:block;">
+            <div id="clients_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="clients.list">Список Ваших клиентов</small>
+              </h2>
+              <table class="table table-bordered" id="clients_table">
+                <thead>
+                <tr>
+                  <th><b data-localize="clients.name">Имя</b></th>
+                  <th><b data-localize="clients.comment">Комментарий</b></th>
+                  <td></td>
+                </tr>
+                <tr class="warning">
+                  <td><input class="btn-mini" id="new_client_name" type="text" style="width:90%;" /></td>
+                  <td><input class="btn-mini" id="new_client_comment" type="text" style="width:90%;" /></td>
+                  <td><a class="btn-small btn-success" href="#" id='add_client' title="Add"><i
+                      class="icon-plus"></i></a></td>
+                </tr>
+
+				 <!--Edit client - class for clone-->
+				<tr class="client_edit warning" style="display:none">
+				<td style="display:none">
+				  <input type="hidden" class="service_key">
+				</td>
+				  <td>
+				<input style="width:90%" type="text" class="btn-mini client_name">
+				 </td>
+				 <td>
+				<input style="width:90%" type="text" class="btn-mini client_comment">
+				 </td>
+				 <td>
+                <a class="btn-small btn-success accept_client_changes" href="#" title="Принять">
+                  <i class="icon-ok"></i></a>
+                <a class="btn-small btn-danger cancel_client_changes" href="#" title="Отмена">
+                  <i class="icon-remove"></i></a>
+				  </td>
+				</tr>
+
+                </thead>
+                <tbody>
+
+                {% for c in clients %}
+                <tr>
+                  <td style="display:none" class="service_key">{{c.key}}</td>
+                  <td class="client_name">{{ c.name }}</td>
+                  <td class="client_comment">{{ c.comment }}</td>
+                  <td>
+                    <a class="btn-small btn-warning delete_client" href="#" title="Delete client">
+                      <i class="icon-trash"></i></a>
+                    <a class="btn-small btn-warning edit_client" href="#" title="Edit client">
+                      <i class="icon-pencil"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+
+              </table>
+            </div>
+          </div> <!-- /container -->
+
+          <!-- TIMETABLE TAB -->
+          <div class="inner" id="tt_container" style="display:none;">
+            <div id="tt_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="tt.timetable">Расписание</small>
+              </h2>
+              <div>
+              <table id="new_event">
+
+              <tr>
+              <td data-localize="tt.eclient">Клиент:</td>
+              <td>
+                <select id="event_client">
+                {% for c in clients %}
+                <option value="{{c.key}}" >
+                {{c.name}}
+                </option>
+                {% endfor %}
+                </select>
+              </td>
+              </tr>
+
+              <tr>
+              <td data-localize="tt.edate">Дата встречи:</td>
+              <td>
+                <input type="date" id="date">
+                </input>
+              </td>
+              </tr>
+
+              <tr>
+              <td data-localize="tt.etime">Время встречи:</td>
+              <td>
+                <input type="time" id="time">
+                </input>
+              </td>
+              </tr>
+
+              <tr>
+              <td data-localize="tt.duration">Длительность:</td>
+              <td><input type="number" id="duration"></input></td>
+              <td data-localize="tt.min">минут</td>
+              </tr>
+
+              <tr>
+              <td data-localize="tt.ecomment">Комментарий:</td>
+              <td><textarea id="comment"></textarea></td>
+              </tr>
+
+              <tr>
+              <td></td>
+              <td><button id="add_new_event" data-localize="tt.add">Добавить</button><td>
+              </tr>
+
+              </table>
+
+
+              <table class="table table-bordered" id="events_table">
+                <thead>
+                <tr>
+                  <th><b data-localize="tt.client">Клиент</b></th>
+                  <th><b data-localize="tt.date">Дата</b></th>
+                  <th><b data-localize="tt.time">Время</b></th>
+                  <th><b data-localize="tt.mduration">Длительность, минут</b></th>
+                  <th><b data-localize="tt.comment">Комментарий</b></th>
+                  <th></th>
+                  <th></th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr class="event_template" style="display:none">
+                  <td style="display:none" class="event_key"></td>
+                  <td class="event_cl"></td>
+                  <td class="date"></td>
+                  <td class="time"></td>
+                  <td class="duration"></td>
+                  <td class="comment"></td>
+                  <td>
+                      <a class="btn-small btn-warning delete_event" href="#" title="Delete event">
+                        <i class="icon-trash"></i></a>
+                      <a class="btn-small btn-warning edit_event" href="#" title="Edit event">
+                        <i class="icon-pencil"></i></a>
+                    </td>
+                </tr>
+
+                <tr class="event_edit warning" style="display:none">
+                  <td style="display:none">
+                    <input type="hidden" class="event_key">
+                  </td>
+				  <td>
+                    <select id="event_cl">
+                    {% for c in clients %}
+                      <option value="{{c.key}}" >
+                      {{c.name}}
+                      </option>
+                    {% endfor %}
+                    </select>
+				 </td>
+				 <td>
+                  <input style="width:90%" type="date" class="btn-mini date">
+				 </td>
+				 <td>
+				  <input style="width:90%" type="time" class="btn-mini time">
+				 </td>
+				 <td>
+				  <input style="width:90%" type="number" class="btn-mini duration">
+				 </td>
+				 <td>
+				  <input style="width:90%" type="text" class="btn-mini comment">
+				 </td>
+				 <td>
+                  <a class="btn-small btn-success accept_event_changes" href="#" title="Принять">
+                    <i class="icon-ok"></i></a>
+                  <a class="btn-small btn-danger cancel_event_changes" href="#" title="Отмена">
+                    <i class="icon-remove"></i></a>
+				  </td>
+				</tr>
+                {% for ev in events %}
+                <tr>
+				  <td style="display:none" class="event_key">{{ev.key}}</td>
+                  <td class="event_cl">{{ ev.client.name }}</td>
+                  <td class="date">{{ ev.event_date.date}}</td>
+                  <td class="time">{{ ev.event_time.time }}</td>
+                  <td class="duration">{{ ev.duration }}</td>
+                  <td class="comment">{{ ev.comment }}</td>
+				  <td>
+                    <a class="btn-small btn-warning delete_event" href="#" title="Delete event">
+                      <i class="icon-trash"></i></a>
+                    <a class="btn-small btn-warning edit_event" href="#" title="Edit event">
+                      <i class="icon-pencil"></i></a>
+                  </td>
+                </tr>
+                {% endfor %}
+
+                </tbody>
+
+                </table>
+
+
+              </div>
+
+            </div>
+          </div> <!-- /container -->
+
+          <!-- REPORTS TAB -->
+          <div class="inner" id="reports_container" style="display:none;">
+            <div id="reports_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small>Here to be reports</small>
+              </h2>
+
+            </div>
+          </div> <!-- /container -->
+
+          <!-- ASSISTANTS TAB -->
+          <div class="inner" id="assistants_container" style="display:none;">
+            <div id="assistants_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="navbar.assistants">Ассистенты</small>
+              </h2>
+                {% include "./tabs/assistants.html" %}
+            </div>
+          </div> <!-- /container -->
+
+          <!-- GAMES TAB -->
+          <div class="inner" id="games_container" style="display:none;">
+            <div id="games_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="navbar.games">Игры</small>
+              </h2>
+
+              <table class="table-bordered" style="width:900px;" id="ph">
+               	<tr>
+					<td><button type="button" onclick="loadGame('/games/minesweeper.html')" data-localize="games.miner">Сапер</button></td>
+				</tr>
+				<tr>
+					<td><button type="button" onclick="loadGame('/games/hanoi.html')" data-localize="games.htowers">Ханойская башня</button></td>
+				</tr>		
+				<tr>
+					<td><button type="button" onclick="loadGame('/games/2048.html')">2048</button></td>
+				</tr>	
+              </table>
+			  <div id="game" data-localize="games.choose">Выберите игру</div>
+            </div>
+          </div>
+
+          {% if isAdmin %}
+          <!-- ADMIN PAGE TAB -->
+          <div class="inner" id="adminPage_container" style="display:none;">
+            <div id="adminPage_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="navbar.admin">Админочка</small>
+              </h2>
+              {% include "./tabs/admin_page.html" %}
+            </div>
+          </div> <!-- /container -->
+          {% endif %}
+
+          <!-- SERVICES TAB -->
+          <div class="inner" id="services_container" style="display:none;">
+            <div id="services_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="servlist">Список услуг</small>
+              </h2>
+              {% include "./tabs/services.html" %}
+            </div>
+          </div> <!-- /container -->
+
+          <!-- Reference TAB -->
+          <div class="inner" id="reference_container" style="display:none;">
+            <div id="reference_content" class="content" style="display:block;">
+              <h2 style="line-height:15px;">
+                <small data-localize="about.short">Краткая справка.</small>
+              </h2>
+              <p data-localize="about.instr">Тыкайте в кнопки и смотрите, что получается</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+
+
+    </table>
+  </div> <!-- /container -->
+
+  <div class="container-fluid">
+    <small>&copy; Copyright 2016 Web Applications Development Course, SPBU</small>
+  </div>
+
+</div>
+</body>
+</html>

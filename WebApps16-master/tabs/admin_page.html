@@ -1,0 +1,281 @@
+<h2 style="line-height:15px;">
+  <small>Hello Admin</small>
+</h2>
+<ul class="nav nav-tabs" role="tablist" id="admin_service" data-tabs="tabs">
+  <li class="active"><a href="#active_services" role="tab" data-toogle="tab" data-localize="admin.actSer">Активные услуги</a></li>
+  <li><a href="#inactive_services" role="tab" data-toogle="tab" data-localize="admin.lockSer">Неактивные услуги</a></li>
+  <li>
+    <a href="#services_from_user" role="tab" data-toogle="tab" data-localize="admin.userOff">Предложения от пользователей</a>
+  </li>
+</ul>
+<div class="tab-content">
+  <div class="tab-pane active" id="active_services">
+    <table class="table table-bordered" id="active_service_table">
+      <colgroup>
+        <col>
+        <col width="90">
+      </colgroup>
+      <thead>
+      <tr>
+        <th><b data-localize="admin.title">Название</b></th>
+        <td></td>
+      </tr>
+      <tr class="warning">
+        <td><input class="btn-mini service_name" type="text" style="width:90%;"/></td>
+        <td><a class="btn-small btn-success add_service" href="#" title="Add"><i
+            class="icon-plus"></i></a></td>
+      </tr>
+      </thead>
+      <tbody>
+
+      {% for c in activeServices %}
+      <tr>
+        <td style="display:none" class="service_key">{{c.key}}</td>
+        <td class="service_name">{{ c.name }}</td>
+        <td>
+          <a class="btn-small btn-danger delete_service" href="#" title="Удалить услугу">
+            <i class="icon-trash"></i></a>
+          <a class="btn-small btn-warning edit_service" href="#" title="Редактировать услугу">
+            <i class="icon-pencil"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr class="service_template" style="display: none;">
+        <td style="display:none" class="service_key"></td>
+        <td class="service_name"></td>
+        <td>
+          <a class="btn-small btn-danger delete_service" href="#" title="Удалить сервис">
+            <i class="icon-trash"></i></a>
+          <a class="btn-small btn-warning edit_service" href="#" title="Редактировать сервис">
+            <i class="icon-pencil"></i></a>
+        </td>
+      </tr>
+      <tr class="service_edit warning" style="display: none">
+        <td style="display:none">
+          <input type="hidden" class="service_key">
+          <input type="hidden" class="old_name">
+        </td>
+        <td>
+          <input style="width:96%" type="text" class="btn-mini service_name">
+        </td>
+        <td>
+          <a class="btn-small btn-success accept_edit" href="#" title="Принять">
+            <i class="icon-ok"></i></a>
+          <a class="btn-small btn-danger cancel_edit" href="#" title="Отмена">
+            <i class="icon-remove"></i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tab-pane" id="inactive_services">
+    <table class="table table-bordered" id="inactive_service_table">
+      <colgroup>
+        <col>
+        <col width="90">
+      </colgroup>
+      <thead>
+      <tr>
+        <th><b data-localize="admin.title">Название</b></th>
+        <td></td>
+      </tr>
+      <tr class="warning">
+        <td><input class="btn-mini service_name" type="text" style="width:90%;"/></td>
+        <td><a class="btn-small btn-success add_service" href="#" title="Add"><i
+            class="icon-plus"></i></a></td>
+      </tr>
+      </thead>
+      <tbody>
+
+      {% for c in inactiveServices %}
+      <tr>
+        <td style="display:none" class="service_key">{{c.key}}</td>
+        <td class="service_name">{{ c.name }}</td>
+        <td>
+          <a class="btn-small btn-success restore_service" href="#" title="Restore service">
+            <i class="icon-retweet"></i></a>
+          <a class="btn-small btn-warning edit_service" href="#" title="Edit service">
+            <i class="icon-pencil"></i></a>
+        </td>
+      </tr>
+      {% endfor %}
+      <tr class="service_template" style="display: none;">
+        <td style="display:none" class="service_key"></td>
+        <td class="service_name"></td>
+        <td>
+          <a class="btn-small btn-success restore_service" href="#" title="Restore service">
+            <i class="icon-retweet"></i></a>
+          <a class="btn-small btn-warning edit_service" href="#" title="Edit service">
+            <i class="icon-pencil"></i></a>
+        </td>
+      </tr>
+      <tr class="service_edit warning" style="display: none">
+        <td style="display:none">
+          <input type="hidden" class="service_key">
+          <input type="hidden" class="old_name">
+        </td>
+        <td>
+          <input style="width:96%" type="text" class="btn-mini service_name">
+        </td>
+        <td>
+          <a class="btn-small btn-success accept_edit" href="#" title="Принять">
+            <i class="icon-ok"></i></a>
+          <a class="btn-small btn-danger cancel_edit" href="#" title="Отмена">
+            <i class="icon-remove"></i></a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="tab-pane" id="services_from_user">
+
+    <div class="tabbable">
+      <ul class="nav nav-tabs" role="tablist" id="offer_service" data-tabs="tabs">
+        <li class="active"><a href="#new_offer" role="tab" data-toogle="tab" data-localize="admin.newOff">Новые предложения</a></li>
+        <li><a href="#offer_with_answer" role="tab" data-toogle="tab" data-localize="admin.ansOff">Предложения с ответами администратора</a></li>
+        <li>
+          <a href="#inactive_offer" role="tab" data-toogle="tab" data-localize="admin.delOff">Удаленые предложения</a>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="new_offer">
+          <table class="table table-bordered" id="new_offer_table">
+            <colgroup>
+              <col width="25%">
+              <col width="32%">
+              <col>
+              <col width="90">
+            </colgroup>
+            <thead>
+            <tr>
+              <th><b data-localize="admin.title">Название</b></th>
+              <th><b data-localize="admin.userComment">Комментарий пользователя</b></th>
+              <th><b data-localize="admin.adminComment">Комментарий администратора</b></th>
+              <td></td>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for c in newOffers %}
+            <tr>
+              <td style="display:none" class="service_key">{{c.key}}</td>
+              <td class="service_name">{{ c.name }}</td>
+              <td class="service_user_comment">{{ c.userComment }}</td>
+              <td class="service_admin_comment">{{ c.adminComment }}</td>
+              <td>
+			    <a class="btn-small btn-success add_service" href="#" title="Принять предложение">
+                  <i class="icon-ok"></i></a>
+                <a class="btn-small btn-danger delete_service" href="#" title="Удалить предложение">
+                  <i class="icon-trash"></i></a>
+                <a class="btn-small btn-warning answer_offer" href="#" title="Ответить на предложение">
+                  <i class="icon-pencil"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            <tr class="service_template" style="display: none;">
+              <td style="display:none" class="service_key"></td>
+              <td class="service_name"></td>
+              <td class="service_user_comment"></td>
+              <td class="service_admin_comment"></td>
+              <td>
+                <a class="btn-small btn-danger delete_service" href="#" title="Удалить предложение">
+                  <i class="icon-trash"></i></a>
+                <a class="btn-small btn-warning answer_offer" href="#" title="Ответить на предложение">
+                  <i class="icon-pencil"></i></a>
+              </td>
+            </tr>
+            <tr style="display: none  " class="warning answer_offer_form">
+              <td style="display: none;" class="service_key"></td>
+              <td class="service_name"></td>
+              <td class="service_user_comment"></td>
+              <td><textarea class="service_admin_comment" name="textarea" style="width:98%;height:100px;"></textarea></td>
+              <td>
+                <a class="btn-small btn-success accept_answer" href="#" title="Принять">
+                  <i class="icon-ok"></i></a>
+                <a class="btn-small btn-danger cancel_answer" href="#" title="Отмена">
+                  <i class="icon-remove"></i></a>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane" id="offer_with_answer">
+          <table class="table table-bordered" id="offer_with_answer_table">
+            <colgroup>
+              <col width="25%">
+              <col width="32%">
+              <col>
+              <col width="90">
+            </colgroup>
+            <thead>
+            <tr>
+              <th><b data-localize="admin.title">Название</b></th>
+              <th><b data-localize="admin.userComment">Комментарий пользователя</b></th>
+              <th><b data-localize="admin.adminComment">Комментарий администратора</b></th>
+              <td></td>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for c in offersWithComment %}
+            <tr>
+              <td style="display:none" class="service_key">{{c.key}}</td>
+              <td class="service_name">{{ c.name }}</td>
+              <td class="service_user_comment">{{ c.userComment }}</td>
+              <td class="service_admin_comment">{{ c.adminComment }}</td>
+              <td>
+                <a class="btn-small btn-danger delete_service" href="#" title="Удалить предложение">
+                  <i class="icon-trash"></i></a>
+              </td>
+            </tr>
+            {% endfor %}
+            <tr class="service_template" style="display: none;">
+              <td style="display:none" class="service_key"></td>
+              <td class="service_name"></td>
+              <td class="service_user_comment"></td>
+              <td class="service_admin_comment"></td>
+              <td>
+                <a class="btn-small btn-danger delete_service" href="#" title="Удалить сервис">
+                  <i class="icon-trash"></i></a>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane" id="inactive_offer">
+          <table class="table table-bordered" id="inactive_offer_table">
+            <colgroup>
+              <col width="25%">
+              <col width="32%">
+              <col>
+            </colgroup>
+            <thead>
+            <tr>
+              <th><b data-localize="admin.title">Название</b></th>
+              <th><b data-localize="admin.userComment">Комментарий пользователя</b></th>
+              <th><b data-localize="admin.adminComment">Комментарий администратора</b></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            {% for c in inactiveOffers %}
+            <tr>
+              <td style="display:none" class="service_key">{{c.key}}</td>
+              <td class="service_name">{{ c.name }}</td>
+              <td class="service_user_comment">{{ c.userComment }}</td>
+              <td class="service_admin_comment">{{ c.adminComment }}</td>
+            </tr>
+            {% endfor %}
+
+            <tr style="display: none" class="inactive_offer_template">
+              <td style="display:none" class="service_key"></td>
+              <td class="service_name"></td>
+              <td class="service_user_comment"></td>
+              <td class="service_admin_comment"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

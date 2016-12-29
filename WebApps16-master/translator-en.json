@@ -1,0 +1,13 @@
+{
+	"navbar":{
+		"clients": "Clietns",
+		"timetable": "Timetable",
+		"reports": "Reports",
+		"assistants": "Assistants",
+		"games": "Games",
+		"services": "Services",
+		"admin": "Admin page",
+		"about": "About",
+		"exit": "Exit"
+	}
+}
