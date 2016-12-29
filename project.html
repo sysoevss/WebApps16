@@ -65,6 +65,7 @@
   <script type="text/javascript" src="/js/project.js"></script>
   <script type="text/javascript" src="/js/jquery.dataTables.min.js"></script>
   <script type="text/javascript" src="/js/dataTables.jqueryui.min.js"></script>
+  <script type="text/javascript" src="/js/jquery.localize.js"></script>
 
   <script>
 	$(document).ready(function(){
@@ -83,21 +84,28 @@
         <a class="brand" href="#" style="color:#0088cc">WebApps 2016</a>
         <div class="nav-collapse collapse">
           <ul class="nav" id="main_menu">
-            <li class="active"><a href="#" id="clients">Клиенты</a></li>
-            <li><a href="#" id="tt">Расписание</a></li>
-            <li><a href="#" id="reports">Отчеты</a></li>
-            <li><a href="#" id="assistants">Помощники</a></li>
-            <li><a href="#" id="games">Игры</a></li>
-            <li><a href="#" id="services">Услуги</a></li>
+            <li class="active"><a href="#" id="clients" data-localize="navbar.clients">Клиенты</a></li>
+            <li><a href="#" id="tt" data-localize="navbar.timetable">Расписание</a></li>
+            <li><a href="#" id="reports" data-localize="navbar.reports">Отчеты</a></li>
+            <li><a href="#" id="assistants" data-localize="navbar.assistants">Помощники</a></li>
+            <li><a href="#" id="games" data-localize="navbar.games">Игры</a></li>
+            <li><a href="#" id="services" data-localize="navbar.services">Услуги</a></li>
             {% if isAdmin %}
-            <li><a href="#" id="adminPage">Admin page</a></li>
+            <li><a href="#" id="adminPage" data-localize="navbar.admin">Admin page</a></li>
             {% endif %}
-            <li><a href="#" id="reference">Справка</a></li>
+            <li><a href="#" id="reference" data-localize="navbar.about">Справка</a></li>
           </ul>
-          <ul style="padding-top: 10px;"><a href="{{logOut}}" title="Выход" style="color: white;">Выход</a></ul>
+          <ul style="padding-top: 10px;">
+          <a href="{{logOut}}" title="Выход" style="color: white;" data-localize="navbar.exit">Выход</a>
+        	<select id="language_select" style="width: 55px; height: 50%; font-size: 80%; float:right;">
+              <option value="ru">RU</option>
+              <option value="en">EN</option>
+            </select>
+            </ul>
         </div><!--/.nav-collapse -->
       </div>
     </div>
+
   </div>
 
   <!-- The main container -->
@@ -110,13 +118,13 @@
           <div class="inner" id="clients_container" style="display:block;">
             <div id="clients_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Список Ваших клиентов</small>
+                <small data-localize="clients.list">Список Ваших клиентов</small>
               </h2>
               <table class="table table-bordered" id="clients_table">
                 <thead>
                 <tr>
-                  <th><b>Имя</b></th>
-                  <th><b>Комментарий</b></th>
+                  <th><b data-localize="clients.name">Имя</b></th>
+                  <th><b data-localize="clients.comment">Комментарий</b></th>
                   <td></td>
                 </tr>
                 <tr class="warning">
@@ -172,13 +180,13 @@
           <div class="inner" id="tt_container" style="display:none;">
             <div id="tt_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Расписание</small>
+                <small data-localize="tt.timetable">Расписание</small>
               </h2>
               <div>
               <table id="new_event">
 
               <tr>
-              <td>Клиент:</td>
+              <td data-localize="tt.eclient">Клиент:</td>
               <td>
                 <select id="event_client">
                 {% for c in clients %}
@@ -191,7 +199,7 @@
               </tr>
 
               <tr>
-              <td>Дата встречи:</td>
+              <td data-localize="tt.edate">Дата встречи:</td>
               <td>
                 <input type="date" id="date">
                 </input>
@@ -199,7 +207,7 @@
               </tr>
 
               <tr>
-              <td>Время встречи:</td>
+              <td data-localize="tt.etime">Время встречи:</td>
               <td>
                 <input type="time" id="time">
                 </input>
@@ -207,19 +215,19 @@
               </tr>
 
               <tr>
-              <td>Длительность:</td>
+              <td data-localize="tt.duration">Длительность:</td>
               <td><input type="number" id="duration"></input></td>
-              <td>минут</td>
+              <td data-localize="tt.min">минут</td>
               </tr>
 
               <tr>
-              <td>Комментарий</td>
+              <td data-localize="tt.ecomment">Комментарий:</td>
               <td><textarea id="comment"></textarea></td>
               </tr>
 
               <tr>
               <td></td>
-              <td><button id="add_new_event">Добавить</button><td>
+              <td><button id="add_new_event" data-localize="tt.add">Добавить</button><td>
               </tr>
 
               </table>
@@ -228,11 +236,11 @@
               <table class="table table-bordered" id="events_table">
                 <thead>
                 <tr>
-                  <th><b>Клиент</b></th>
-                  <th><b>Дата</b></th>
-                  <th><b>Время</b></th>
-                  <th><b>Длительность, минут</b></th>
-                  <th><b>Комментарий</b></th>
+                  <th><b data-localize="tt.client">Клиент</b></th>
+                  <th><b data-localize="tt.date">Дата</b></th>
+                  <th><b data-localize="tt.time">Время</b></th>
+                  <th><b data-localize="tt.mduration">Длительность, минут</b></th>
+                  <th><b data-localize="tt.comment">Комментарий</b></th>
                   <th></th>
                   <th></th>
 
@@ -328,7 +336,7 @@
           <div class="inner" id="assistants_container" style="display:none;">
             <div id="assistants_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Ассистенты</small>
+                <small data-localize="navbar.assistants">Ассистенты</small>
               </h2>
                 {% include "./tabs/assistants.html" %}
             </div>
@@ -338,21 +346,21 @@
           <div class="inner" id="games_container" style="display:none;">
             <div id="games_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Игры</small>
+                <small data-localize="navbar.games">Игры</small>
               </h2>
 
               <table class="table-bordered" style="width:900px;" id="ph">
                	<tr>
-					<td><button type="button" onclick="loadGame('/games/minesweeper.html')">Сапер</button></td>
+					<td><button type="button" onclick="loadGame('/games/minesweeper.html')" data-localize="games.miner">Сапер</button></td>
 				</tr>
 				<tr>
-					<td><button type="button" onclick="loadGame('/games/hanoi.html')">Ханойская башня</button></td>
+					<td><button type="button" onclick="loadGame('/games/hanoi.html')" data-localize="games.htowers">Ханойская башня</button></td>
 				</tr>		
 				<tr>
 					<td><button type="button" onclick="loadGame('/games/2048.html')">2048</button></td>
 				</tr>	
               </table>
-			  <div id="game">Выберите игру</div>
+			  <div id="game" data-localize="games.choose">Выберите игру</div>
             </div>
           </div>
 
@@ -361,7 +369,7 @@
           <div class="inner" id="adminPage_container" style="display:none;">
             <div id="adminPage_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Админочка</small>
+                <small data-localize="navbar.admin">Админочка</small>
               </h2>
               {% include "./tabs/admin_page.html" %}
             </div>
@@ -372,7 +380,7 @@
           <div class="inner" id="services_container" style="display:none;">
             <div id="services_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Список услуг</small>
+                <small data-localize="servlist">Список услуг</small>
               </h2>
               {% include "./tabs/services.html" %}
             </div>
@@ -382,9 +390,9 @@
           <div class="inner" id="reference_container" style="display:none;">
             <div id="reference_content" class="content" style="display:block;">
               <h2 style="line-height:15px;">
-                <small>Краткая справка.</small>
+                <small data-localize="about.short">Краткая справка.</small>
               </h2>
-              <p>Тыкайте в кнопки и смотрите, что получается</p>
+              <p data-localize="about.instr">Тыкайте в кнопки и смотрите, что получается</p>
             </div>
           </div>
         </td>

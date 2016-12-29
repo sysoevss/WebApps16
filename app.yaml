@@ -16,6 +16,8 @@ handlers:
 
 - url: /games
   static_dir: games  
+
+
   
 - url: /.*
   script: main.application

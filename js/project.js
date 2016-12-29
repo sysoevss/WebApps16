@@ -55,7 +55,11 @@ $(document).ready(function () {
         e.preventDefault();
         $(this).tab('show');
     });
-
+    $("#language_select").change(function(e){
+        e.preventDefault();
+        var $lang = $("#language_select").val();
+        $("[data-localize]").localize("js/translator", { language: $lang });
+    });
     //
     //
     // ADMIN OFFERS
